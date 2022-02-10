@@ -9,16 +9,16 @@ public class environmentUrls {
 
     }
 
-    public void initialize_google_environment_urls(){
-        google_urls.put("DEV", "https://www.dev.google.com");
-        google_urls.put("TEST", "https://www.test.google.com");
-        google_urls.put("UAT", "https://www.uat.google.com");
-        google_urls.put("PERF", "https://www.perf.google.com");
-        google_urls.put("PROD", "https://www.google.com");
+    public void initialize_environment_urls(){
+        google_urls.put("DEV", "http://www.dev.automationpractice.com/index.php");
+        google_urls.put("TEST", "http://www.test.automationpractice.com/index.php");
+        google_urls.put("UAT", "http://www.uat.automationpractice.com/index.php");
+        google_urls.put("PERF", "http://www.perf.automationpractice.com/index.php");
+        google_urls.put("PROD", "http://automationpractice.com/index.php");
     }
 
-    public Hashtable<String, String> get_google_environment_variables(){
-        initialize_google_environment_urls();
+    public Hashtable<String, String> get_environment_variables(){
+        initialize_environment_urls();
         return google_urls;
     }
 }
