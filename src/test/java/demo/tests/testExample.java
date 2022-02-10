@@ -1,4 +1,4 @@
-package google.tests;
+package demo.tests;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
