@@ -1,16 +1,19 @@
 package utility;
 
 
-import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -30,12 +33,41 @@ public class seleniumActions {
 
     }
 
-    public void setDriver(WebDriver driver) {
-        this.driver = driver;
+    public WebDriver openBrowser(String browser) {
+        browser = browser.toLowerCase(Locale.ROOT);
+
+        if((browser.equals("chrome"))||(browser.equals("google"))){
+            driver = getChromeDriver();
+            return driver;
+        }
+        if((browser.equals("firefox"))||(browser.equals("mozilla"))){
+            driver = getFirefoxDriver();
+            return driver;
+        }
+        if((browser.equals("opera"))||(browser.equals("op"))){
+            driver = getOperaDriver();
+            return driver;
+        }
+        if((browser.equals("edge"))||(browser.equals("microsoft"))){
+            driver = getEdgeDriver();
+            return driver;
+        }
+        if((browser.equals("safari"))||(browser.equals("sf"))){
+            driver = getSafariDriver();
+            return driver;
+        }
+        if((browser.equals("ie"))||(browser.equals("explorer"))){
+            driver = getIEDriver();
+            return driver;
+        }
+        else{
+            driver = getChromeDriver();
+            return driver;
+        }
     }
 
-    public WebDriver getDriver(){
-        return this.driver;
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
     }
 
     public void navigateToUrl(WebDriver driver, String url){
@@ -71,11 +103,21 @@ public class seleniumActions {
             if(identifier.equals("partialLink")) {
                 element = driver.findElement(By.partialLinkText(splitString[1]));
             }
+            if(identifier.equals("name")){
+                element = driver.findElement(By.name(splitString[1]));
+            }
         }
         catch (ElementNotVisibleException e) {
             System.out.println("Could not get the element because it is not visible");
         }
         return element;
+    }
+
+    public void hoverElement(WebDriver driver, String elementToHover) {
+        WebElement element = getElement(driver, elementToHover);
+        Actions action = new Actions(driver);
+
+        action.moveToElement(element).build().perform();
     }
 
     public void clickElement(WebDriver driver, String elementToClick){
@@ -155,6 +197,64 @@ public class seleniumActions {
 
             if(identifier.equals("name")){
                 wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.name(splitString[1])
+                ));
+            }
+        }
+        catch (ElementNotVisibleException e) {
+            System.out.println("Element not visible after:  " + timeToWait + " seconds.");
+        }
+    }
+
+    public void waitUntilElementIsInteractable(WebDriver driver, String elementToWait, int timeToWait){
+        WebDriverWait wait;
+
+        wait = new WebDriverWait(driver,
+                Duration.ofSeconds(timeToWait));
+
+        String[] splitString = elementToWait.split(":");
+        String identifier = splitString[0].toLowerCase(Locale.ROOT);
+
+        try {
+
+            if(identifier.equals("id")) {
+                wait.until(ExpectedConditions.elementToBeClickable(
+                        By.id(splitString[1])
+                ));
+            }
+
+            if(identifier.equals("link")) {
+                wait.until(ExpectedConditions.elementToBeClickable(
+                        By.linkText(splitString[1])
+                ));
+            }
+
+            if(identifier.equals("xpath")) {
+                wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath(splitString[1])
+                ));
+            }
+
+            if(identifier.equals("class")) {
+                wait.until(ExpectedConditions.elementToBeClickable(
+                        By.className(splitString[1])
+                ));
+            }
+
+            if(identifier.equals("css")) {
+                wait.until(ExpectedConditions.elementToBeClickable(
+                        By.cssSelector(splitString[1])
+                ));
+            }
+
+            if(identifier.equals("partialLink")) {
+                wait.until(ExpectedConditions.elementToBeClickable(
+                        By.partialLinkText(splitString[1])
+                ));
+            }
+
+            if(identifier.equals("name")){
+                wait.until(ExpectedConditions.elementToBeClickable(
                         By.name(splitString[1])
                 ));
             }
